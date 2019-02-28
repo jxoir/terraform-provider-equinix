@@ -11,27 +11,33 @@ func Provider() terraform.ResourceProvider {
 		Schema: map[string]*schema.Schema{
 			"equinix_app_id": {
 				Type:        schema.TypeString,
-				Optional:    true,
+				Required:    true,
 				Description: "This is the Equinix Developer Applicaition ID",
-				DefaultFunc: schema.EnvDefaultFunc("EQUINIX_APP_ID", nil),
+				DefaultFunc: schema.MultiEnvDefaultFunc([]string{"EQUINIX_API_ID"}, nil),
 			},
 			"equinix_app_secret": {
 				Type:        schema.TypeString,
-				Optional:    true,
+				Required:    true,
 				Description: "This is the Equinix Developer Applicaition Secret",
-				DefaultFunc: schema.EnvDefaultFunc("EQUINIX_APP_ID", nil),
+				DefaultFunc: schema.MultiEnvDefaultFunc([]string{"EQUINIX_API_SECRET"}, nil),
 			},
 			"equinix_api_user": {
 				Type:        schema.TypeString,
-				Optional:    true,
+				Required:    true,
 				Description: "This is the Equinix Customer Portal user to make API calls",
-				DefaultFunc: schema.EnvDefaultFunc("EQUINIX_API_USER", nil),
+				DefaultFunc: schema.MultiEnvDefaultFunc([]string{"ECX_API_USER"}, nil),
 			},
 			"equinix_api_password": {
 				Type:        schema.TypeString,
-				Optional:    true,
+				Required:    true,
 				Description: "This is the Equinix Customer Portal user password to make API calls",
-				DefaultFunc: schema.EnvDefaultFunc("EQUINIX_API_PASSWORD", nil),
+				DefaultFunc: schema.MultiEnvDefaultFunc([]string{"ECX_API_USER_PASSWORD"}, nil),
+			},
+			"equinix_api_host": {
+				Type:        schema.TypeString,
+				Required:    true,
+				Description: "This is the Equinix Customer Portal user password to make API calls",
+				DefaultFunc: schema.MultiEnvDefaultFunc([]string{"ECX_API_HOST"}, nil),
 			},
 			"debug": {
 				Type:     schema.TypeBool,
@@ -51,6 +57,7 @@ func providerConfigure(d *schema.ResourceData) (interface{}, error) {
 		AppSecret: d.Get("equinix_app_secret").(string),
 		UserName:  d.Get("equinix_api_user").(string),
 		Password:  d.Get("equinix_api_password").(string),
+		Endpoint:  d.Get("equinix_api_host").(string),
 		Debug:     d.Get("debug").(bool),
 	}
 

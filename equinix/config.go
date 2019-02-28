@@ -28,9 +28,11 @@ type EquinixClient struct {
 // Client configures and returns a fully initialized EquinixAPIClient
 func (c *Config) Client() (interface{}, error) {
 	//var client equinixapiclient.EquinixAPIClient
-	var client EquinixClient
-
-	ecxapihost := "https://api.equinix.com"
+	// default api host
+	ecxapihost := "api.equinix.com"
+	if c.Endpoint != "" {
+		ecxapihost = c.Endpoint
+	}
 
 	clientParams := &equinixapiclient.EquinixAPIParams{
 		AppID:           c.AppID,
@@ -45,8 +47,11 @@ func (c *Config) Client() (interface{}, error) {
 
 	// create new ecx api client
 	ecxclient := equinixapiclient.NewEcxAPIClient(clientParams, ecxapihost, false)
-	client.client = ecxclient
-	client.ECXConnectionsAPI = ecxbuyer.NewECXConnectionsAPI(client.client)
-
+	//client.client = ecxclient
+	//client.ECXConnectionsAPI = ecxbuyer.NewECXConnectionsAPI(client.client)
+	client := &EquinixClient{
+		client:            ecxclient,
+		ECXConnectionsAPI: ecxbuyer.NewECXConnectionsAPI(ecxclient),
+	}
 	return client, nil
 }
