@@ -1,0 +1,4 @@
+.goreleaser.yml
+/dist
+go.sum
+/vendor
