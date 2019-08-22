@@ -2,3 +2,7 @@
 /dist
 go.sum
 /vendor
+/examples/terraform-provider-equinix*
+/examples/.terraform
+.terraform.tfstate*
+terraform.tfstate*
