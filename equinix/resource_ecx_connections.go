@@ -239,11 +239,7 @@ func resourceConnectionRead(d *schema.ResourceData, m interface{}) error {
 		d.Set("primary_vlan_stag", int(conn.Payload.VlanSTag))
 		d.Set("primary_vlan_ctag", conn.Payload.ZSideVlanCTag)
 
-		d.Set("primary_zside_port_uuid", conn.Payload.ZSidePortUUID)
 		d.Set("primary_zside_vlan_ctag", conn.Payload.ZSideVlanCTag)
-
-		// Should fail on 32-bit systems with large ints
-		d.Set("primary_zside_vlan_stag", int(conn.Payload.ZSideVlanSTag))
 
 		d.Set("seller_profile_uuid", conn.Payload.SellerServiceUUID)
 		d.Set("purchase_order_number", conn.Payload.PurchaseOrderNumber)
