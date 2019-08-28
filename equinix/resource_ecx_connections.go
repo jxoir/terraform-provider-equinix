@@ -204,10 +204,10 @@ func resourceConnectionCreate(d *schema.ResourceData, m interface{}) error {
 		switch t := err.(type) {
 		case *apiconnections.CreateConnectionUsingPOSTBadRequest:
 			for _, er := range t.Payload {
-				return fmt.Errorf("Error %s: %s - %s - %s\n", er.ErrorCode, er.ErrorMessage, er.Property, er.MoreInfo)
+				return fmt.Errorf("Error %s: %s - %s - %s", er.ErrorCode, er.ErrorMessage, er.Property, er.MoreInfo)
 			}
 		default:
-			return fmt.Errorf("Error creating connection: %s\n", err.Error())
+			return fmt.Errorf("Error creating connection: %s", err.Error())
 		}
 	}
 	d.SetId(conn.Payload.PrimaryConnectionID)
@@ -284,10 +284,20 @@ func resourceConnectionDelete(d *schema.ResourceData, m interface{}) error {
 
 	_, err := client.DeleteByUUID(d.Id())
 	if err != nil {
-		return err
+		return fmt.Errorf("Error deleting connection: %s", err.Error())
 	}
 
 	d.SetId("")
+
+	secondaryConn := d.Get("redundant_uuid")
+	if secondaryConn != "" {
+		_, err := client.DeleteByUUID(secondaryConn.(string))
+		if err != nil {
+			return fmt.Errorf("Error deleting secondary connection: %s", err.Error())
+		}
+
+		d.Set("redundant_uuid", "")
+	}
 
 	return nil
 }
