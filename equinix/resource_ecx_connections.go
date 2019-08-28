@@ -2,6 +2,7 @@ package equinix
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/hashicorp/terraform/helper/schema"
 	apiconnections "github.com/jxoir/go-ecxfabric/buyer/client/connections"
@@ -276,7 +277,9 @@ func resourceConnectionRead(d *schema.ResourceData, m interface{}) error {
 }
 
 func resourceConnectionUpdate(d *schema.ResourceData, m interface{}) error {
-	return resourceConnectionRead(d, m)
+	resourceConnectionDelete(d, m)
+	time.Sleep(30 * time.Second)
+	return resourceConnectionCreate(d, m)
 }
 
 func resourceConnectionDelete(d *schema.ResourceData, m interface{}) error {
