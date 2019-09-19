@@ -66,7 +66,7 @@ func resourceConnection() *schema.Resource {
 			},
 			"primary_zside_vlan_stag": &schema.Schema{
 				Type:     schema.TypeInt,
-				Optional: true,
+				Computed: true,
 			},
 			"purchase_order_number": &schema.Schema{
 				Type:     schema.TypeString,
@@ -164,9 +164,6 @@ func resourceConnectionCreate(d *schema.ResourceData, m interface{}) error {
 	if d.Get("primary_zside_vlan_ctag") != nil {
 		params.PrimaryZSideVlanCTag = int64(d.Get("primary_zside_vlan_ctag").(int))
 	}
-	if d.Get("primary_zside_vlan_stag") != nil {
-		params.PrimaryZSideVlanSTag = int64(d.Get("primary_zside_vlan_stag").(int))
-	}
 	params.ProfileUUID = d.Get("seller_profile_uuid").(string)
 	params.PurchaseOrderNumber = d.Get("purchase_order_number").(string)
 
@@ -240,7 +237,7 @@ func resourceConnectionRead(d *schema.ResourceData, m interface{}) error {
 		d.Set("primary_vlan_ctag", conn.Payload.ZSideVlanCTag)
 
 		d.Set("primary_zside_vlan_ctag", conn.Payload.ZSideVlanCTag)
-
+		d.Set("primary_zside_vlan_stag", conn.Payload.ZSideVlanSTag)
 		d.Set("seller_profile_uuid", conn.Payload.SellerServiceUUID)
 		d.Set("purchase_order_number", conn.Payload.PurchaseOrderNumber)
 
