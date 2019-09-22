@@ -287,6 +287,8 @@ func resourceConnectionDelete(d *schema.ResourceData, m interface{}) error {
 
 	secondaryConn := d.Get("redundant_uuid")
 	if secondaryConn != "" {
+		time.Sleep(20 * time.Second)
+		
 		_, err := client.DeleteByUUID(secondaryConn.(string))
 		if err != nil {
 			return fmt.Errorf("Error deleting secondary connection: %s", err.Error())
@@ -295,5 +297,7 @@ func resourceConnectionDelete(d *schema.ResourceData, m interface{}) error {
 		d.Set("redundant_uuid", "")
 	}
 
+	time.Sleep(20 * time.Second)
+	
 	return nil
 }
