@@ -35,3 +35,16 @@ resource "equinix_ecx_connection" "azure" {
     seller_region = "westeurope"
     named_tag = "Public"
 }
+
+resource "equinix_ecx_connection" "google" {
+    primary_name = "CMA_GCP_TERRAFORM"
+    speed = 50
+    speed_unit = "MB"
+    seller_profile_uuid = "bd4570e2-d792-4a00-87f5-3bde040cdcd7" // Google Cloud Partner Interconnect Zone 1
+    primary_port_uuid = "66284add-49a3-9a30-b4e0-30ac094f8af1" // EQUINIX_SVC-LD5-CX-PRI-01
+    authorization_key = "0418d78e-9a30-b4e0-49a3-6e2932016439/europe-west2/1" // VLAN Pairing Key
+    notifications = ["your@email.com"]
+    primary_vlan_stag = 3060
+    seller_metro_code = "LD"
+    seller_region = "europe-west2"
+}
